@@ -11,6 +11,7 @@
 #include "i2c.h"
 #include "uart.h"
 #include "external_eeprom.h"
+#include <string.h>
 
 
 #define SAVE_PASSWORD_COMMAND     0
@@ -87,23 +88,30 @@ int main()
 
 void Save_Password()
 {
-	uint8 str[8];
-	uint8 val;
+	uint8 str[8]; //For Storing
+	uint8 val[8]; //For Checking
+
 	UART_sendByte(SAVE_PASSWORD_COMMAND);
 	_delay_ms(100);
 	UART_recieveString(str);
-//	val=UART_recieveByte();
+
 	EEPROM_writeString(0x0311, str);
-//	EEPROM_writeByte(0x0311, str[0]); /* Write 0x0F in the external EEPROM */
 	_delay_ms(100);
 
 	UART_sendByte(PASSWORD_SAVED);
 	_delay_ms(100);
-	// EEPROM_readByte(0x0311, &val);   //Read 0x0F from the external EEPROM
-	// while(1)
-	// {
-	// 	PORTB = 1<<val;
-	// }
+
+	EEPROM_readString(0x0311, val);
+
+	//Compare Stored String With Received String
+	uint8 cmp = strcmp((const char*)val,(const char*)str);
+
+	//Check If Password Is Stored Correctly
+	if (cmp == 0) //match
+		PORTB = 1<<0;
+	else
+		PORTB = 1<<1;
+
 }
 
 
@@ -112,19 +120,27 @@ void Check_Password()
 {
 	uint8 str[8];
 	uint8 val[8];
+
 	UART_sendByte(CHECK_PASSWORD_COMMAND);
 	_delay_ms(100);
 	UART_recieveString(str);
 
+	//Read Stored String in EEPROM
 	EEPROM_readString(0x0311, val);
 
-	if (val == str[0])
+
+	//Compare Received String with Stored String
+	uint8 cmp = strcmp((const char*)val,(const char*)str);
+
+	if (cmp == 0) //match
 	{
 		UART_sendByte(PASSWORD_MATCH);
+		PORTB = 1<<2;
 	}
 	else
 	{
 		UART_sendByte(PASSWORD_NOT_MATCH);
+		PORTB = 1<<3;
 	}
 
 

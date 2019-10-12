@@ -9,9 +9,9 @@
  * Author: Mohamed Tarek
  *
  *******************************************************************************/
-#include "../Door_Locking_System_MC2/external_eeprom.h"
+#include "external_eeprom.h"
 
-#include "../Door_Locking_System_MC2/i2c.h"
+#include "i2c.h"
 
 void EEPROM_init(void)
 {
@@ -22,11 +22,12 @@ void EEPROM_init(void)
 uint8 EEPROM_writeString(uint16 u16addr, const uint8 *Str)
 {
     uint8 i = 0;
-    while(Str[i] != '#')
+    while(Str[i] != '\0')
     {
         EEPROM_writeByte(u16addr++,Str[i++]);
+        _delay_ms(100);
     }
-    EEPROM_writeByte(u16addr++,'#');
+    EEPROM_writeByte(u16addr,'\0');
     return SUCCESS;
 }
 
@@ -34,11 +35,14 @@ uint8 EEPROM_readString(uint16 u16addr, uint8 *Str)
 {
 
     EEPROM_readByte(u16addr++,Str);
-    while(*Str != '#')
+    uint8 i = 0;
+    while(*Str != '\0')
     {
         Str++;
         EEPROM_readByte(u16addr++,Str);
+        _delay_ms(100);
     }
+    *(Str+i) = '\0';
     return SUCCESS;
 }
 
@@ -50,7 +54,13 @@ uint8 EEPROM_writeByte(uint16 u16addr, uint8 u8data)
         return ERROR;
 		
     /* Send the device address, we need to get A8 A9 A10 address bits from the
-     * memory location address and R/W=0 (write) */
+     * memory location address and R/W=0 (write) */ //0x0311
+    //0000 0011 0001 0001 address ely b3teeno
+    //     1098               
+    //0000 0111 0000 0000 mask
+    //0000 0000 0000 1110 or
+    //0000 0000 1010 0000
+    //0000 0000 1010 xxx0
     TWI_write((uint8)(0xA0 | ((u16addr & 0x0700)>>7)));
     if (TWI_getStatus() != TW_MT_SLA_W_ACK)
         return ERROR; 

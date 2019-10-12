@@ -10,7 +10,7 @@
  *
  *******************************************************************************/
  
-#include "../Door_Locking_System_MC2/i2c.h"
+#include "i2c.h"
 
 void TWI_init(void)
 {
