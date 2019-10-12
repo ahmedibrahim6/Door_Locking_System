@@ -27,16 +27,45 @@ void Check_Password(void);
 void Lock_And_Buzzer(void);
 void Open_Door(void);
 
+void timer_init(void)
+{
+	OCR1A = 12700;
+	TCCR1B = (1<<WGM12);
+}
+
+void start_timer(void)
+{
+	TCCR1B |= (1<<CS12) | (1<<CS10);
+	TCNT0 = 0;
+}
+
+void stop_timer(void)
+{
+	TCCR1B = TCCR1B = (1<<WGM12);
+	TIFR |= (1<<OCF1A);//Clear Compare Match Flag
+}
+
 
 int main()
 {
 
+	timer_init();
 
 	UART_init();
 	EEPROM_init();
 //	TWI_init();
 	DDRB  = 0xFF;
 	PORTB = 0x00;
+
+
+	//MOTOR
+	/* configure pin PC0 and PC1 as output pins */
+	DDRC |= (1<<PC2);
+	DDRC |= (1<<PC3);
+
+	/* Motor is stopped at the beginning */
+	PORTC &= ~(1<<PC0);
+	PORTC &= ~(1<<PC1);
 
 	uint8 command;
 
@@ -161,7 +190,27 @@ void Lock_And_Buzzer()
 
 void Open_Door()
 {
+	// MOTOR clockwise Opening
+	PORTC &= (~(1<<PC2));
+	PORTC |= (1<<PC3);
+
+	start_timer(); //Count from to 0 to 15 Secs
+	while(! (TIFR & 1<<OCF1A)); //Wait For Flag
+	stop_timer(); //Clear Compare Match Flag
+
+	// MOTOR anticlockwise Closing
+	PORTC |= (1<<PC2);
+	PORTC &= (~(1<<PC3));
 
 
+	start_timer(); //Count from to 0 to 15 Secs
+	while(! (TIFR & 1<<OCF1A)); //Wait For Flag
+	stop_timer(); //Clear Compare Match Flag
 
+	// MOTOR Stopping
+	PORTC &= (~(1<<PC2));
+	PORTC &= (~(1<<PC3));
+
+
+	UART_sendByte(OPEN_DOOR_COMMAND); //Door Opened
 }

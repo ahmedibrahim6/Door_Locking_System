@@ -243,7 +243,12 @@ bool GET_passwordAndCheck()
 
 void OPENING_door()
 {
+	UART_sendByte(OPEN_DOOR_COMMAND);
 
+	LCD_clearScreen();
+	LCD_displayStringRowColumn(0,0,"Openning Door...");
+
+	UART_recieveByte(); //Door Opened
 
 }
 
