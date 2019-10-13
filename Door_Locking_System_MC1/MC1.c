@@ -11,6 +11,7 @@
 #include "keypad.h"
 #include "lcd.h"
 #include "uart.h"
+#include "timer.h"
 #include <string.h>
 
 #define SAVE_PASSWORD_COMMAND     0
@@ -21,12 +22,9 @@
 #define PASSWORD_NOT_MATCH        5
 #define PASSWORD_SAVED            6
 
-
 #define ENTER_KEY        13
 #define CHANGE_PASS_KEY  '+'
 #define OPEN_DOOR_KEY    '-'
-
-
 
 void OPTION1_setNewPassword(void);
 void OPTION2_ChangePassword(void);
@@ -36,17 +34,15 @@ bool GET_passwordAndCheck();
 void OPENING_door(void);
 void LOCK_and_Buzzer(void);
 
-
 //bool g_setPasswordFirstTime = TRUE ;
 
 uint8 *g_password;
-
-
 
 int main()
 {
 	UART_init();
 	LCD_init();
+	timer_init();
 
 	OPTION1_setNewPassword();
 	uint8 pressedKey;
@@ -73,14 +69,6 @@ int main()
 
 
 }
-
-
-
-
-
-
-
-
 
 void OPTION1_setNewPassword(void)
 {
@@ -148,8 +136,6 @@ void OPTION1_setNewPassword(void)
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
-
-
 void OPTION2_ChangePassword()
 {
 
@@ -161,7 +147,6 @@ void OPTION2_ChangePassword()
 	{
 		OPTION4_mismatchPassword(OPTION1_setNewPassword);
 	}
-
 }
 
 void OPTION3_openDoor()
@@ -174,7 +159,6 @@ void OPTION3_openDoor()
 	{
 		OPTION4_mismatchPassword(OPENING_door);
 	}
-
 }
 
 
@@ -235,7 +219,6 @@ bool GET_passwordAndCheck()
 	{
 		return FALSE;
 	}
-
 }
 
 
@@ -249,13 +232,24 @@ void OPENING_door()
 	LCD_displayStringRowColumn(0,0,"Openning Door...");
 
 	UART_recieveByte(); //Door Opened
-
 }
 
 void LOCK_and_Buzzer()
 {
+	Enable_Timer();
 
+	//Turn On Buzzer
+	/*
+	 * Code
+	 */
 
+	start_timer(90); //Start Timer for 90 secs.
 
+	//Turn Off Buzzer
+	/*
+	 * Code
+	 */
+
+	Disable_Timer();
 }
 

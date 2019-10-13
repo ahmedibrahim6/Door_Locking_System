@@ -11,8 +11,8 @@
 #include "i2c.h"
 #include "uart.h"
 #include "external_eeprom.h"
+#include "timer.h"
 #include <string.h>
-
 
 #define SAVE_PASSWORD_COMMAND     0
 #define CHECK_PASSWORD_COMMAND    1
@@ -27,38 +27,17 @@ void Check_Password(void);
 void Lock_And_Buzzer(void);
 void Open_Door(void);
 
-void timer_init(void)
-{
-	OCR1A = 12700;
-	TCCR1B = (1<<WGM12);
-}
-
-void start_timer(void)
-{
-	TCCR1B |= (1<<CS12) | (1<<CS10);
-	TCNT0 = 0;
-}
-
-void stop_timer(void)
-{
-	TCCR1B = TCCR1B = (1<<WGM12);
-	TIFR |= (1<<OCF1A);//Clear Compare Match Flag
-}
-
-
 int main()
 {
-
 	timer_init();
 
 	UART_init();
 	EEPROM_init();
-//	TWI_init();
+
 	DDRB  = 0xFF;
 	PORTB = 0x00;
 
-
-	//MOTOR
+	//MOTOR Pin Initialization
 	/* configure pin PC0 and PC1 as output pins */
 	DDRC |= (1<<PC2);
 	DDRC |= (1<<PC3);
@@ -79,17 +58,6 @@ int main()
 		    		Save_Password();
 		    		break;
 
-//			case	7 :
-//					PORTB = 1<<2;
-//					break;
-//			case	0 :
-//								PORTB = 1<<5;
-//								break;
-//			case	9:
-////					Save_Password();
-//					PORTB = 1<<1;
-//					break;
-
 			case	CHECK_PASSWORD_COMMAND :
 					Check_Password();
 					break;
@@ -103,17 +71,9 @@ int main()
 					break;
 
 			default : break ;
-
 		}
-
 	}
-
-
 }
-
-
-
-
 
 void Save_Password()
 {
@@ -136,14 +96,13 @@ void Save_Password()
 	uint8 cmp = strcmp((const char*)val,(const char*)str);
 
 	//Check If Password Is Stored Correctly
+	//Check Indicator On Leds
 	if (cmp == 0) //match
 		PORTB = 1<<0;
 	else
 		PORTB = 1<<1;
 
 }
-
-
 
 void Check_Password()
 {
@@ -157,10 +116,10 @@ void Check_Password()
 	//Read Stored String in EEPROM
 	EEPROM_readString(0x0311, val);
 
-
 	//Compare Received String with Stored String
 	uint8 cmp = strcmp((const char*)val,(const char*)str);
 
+	//Check Indicator On Leds
 	if (cmp == 0) //match
 	{
 		UART_sendByte(PASSWORD_MATCH);
@@ -171,12 +130,7 @@ void Check_Password()
 		UART_sendByte(PASSWORD_NOT_MATCH);
 		PORTB = 1<<3;
 	}
-
-
-
 }
-
-
 
 void Lock_And_Buzzer()
 {
@@ -186,31 +140,27 @@ void Lock_And_Buzzer()
 
 }
 
-
-
 void Open_Door()
 {
+	Enable_Timer();
+
 	// MOTOR clockwise Opening
 	PORTC &= (~(1<<PC2));
 	PORTC |= (1<<PC3);
 
-	start_timer(); //Count from to 0 to 15 Secs
-	while(! (TIFR & 1<<OCF1A)); //Wait For Flag
-	stop_timer(); //Clear Compare Match Flag
+	start_timer(15); //Count from to 0 to 15 Secs
 
-	// MOTOR anticlockwise Closing
+	// MOTOR Anticlockwise Closing
 	PORTC |= (1<<PC2);
 	PORTC &= (~(1<<PC3));
 
-
-	start_timer(); //Count from to 0 to 15 Secs
-	while(! (TIFR & 1<<OCF1A)); //Wait For Flag
-	stop_timer(); //Clear Compare Match Flag
+	start_timer(15); //Count from to 0 to 15 Secs
 
 	// MOTOR Stopping
 	PORTC &= (~(1<<PC2));
 	PORTC &= (~(1<<PC3));
 
-
 	UART_sendByte(OPEN_DOOR_COMMAND); //Door Opened
+
+	Disable_Timer(); //disable timer clock
 }
