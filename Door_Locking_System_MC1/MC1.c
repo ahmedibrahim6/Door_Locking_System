@@ -44,6 +44,8 @@ int main()
 	LCD_init();
 	timer_init();
 
+	DDRD  |= 0x80;
+
 	OPTION1_setNewPassword();
 	uint8 pressedKey;
 
@@ -145,6 +147,9 @@ void OPTION2_ChangePassword()
 	}
 	else
 	{
+		LCD_clearScreen();
+		LCD_displayStringRowColumn(0,1,"Wrong Password");
+		_delay_ms(1000);
 		OPTION4_mismatchPassword(OPTION1_setNewPassword);
 	}
 }
@@ -157,6 +162,9 @@ void OPTION3_openDoor()
 	}
 	else
 	{
+		LCD_clearScreen();
+		LCD_displayStringRowColumn(0,1,"Wrong Password");
+		_delay_ms(1000);
 		OPTION4_mismatchPassword(OPENING_door);
 	}
 }
@@ -164,13 +172,19 @@ void OPTION3_openDoor()
 
 void OPTION4_mismatchPassword( void(*ptr) (void) )
 {
-	for(uint8 i = 0 ; i < 5 ; i++)
+	for(uint8 i = 0 ; i < 4 ; i++)
 	{
 		if( GET_passwordAndCheck() )
 		{
 			(*ptr)();
 			return;
 
+		}
+		else
+		{
+			LCD_clearScreen();
+			LCD_displayStringRowColumn(0,1,"Wrong Password");
+			_delay_ms(1000);
 		}
 	}
 
@@ -237,18 +251,15 @@ void OPENING_door()
 void LOCK_and_Buzzer()
 {
 	Enable_Timer();
-
+	LCD_clearScreen();
+	LCD_displayStringRowColumn(0,0,"ThIEF ALERT!!");
 	//Turn On Buzzer
-	/*
-	 * Code
-	 */
+	PORTD |= 0x80;
 
 	start_timer(90); //Start Timer for 90 secs.
 
 	//Turn Off Buzzer
-	/*
-	 * Code
-	 */
+	PORTD &= ~0x80;
 
 	Disable_Timer();
 }
