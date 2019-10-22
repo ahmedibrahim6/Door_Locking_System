@@ -8,24 +8,8 @@
 
 
 
-#include "i2c.h"
-#include "uart.h"
-#include "external_eeprom.h"
-#include "timer.h"
-#include <string.h>
+#include "MC2.h"
 
-#define SAVE_PASSWORD_COMMAND     0
-#define CHECK_PASSWORD_COMMAND    1
-#define LOCK_AND_BUZZER_COMMAND   2
-#define OPEN_DOOR_COMMAND         3
-#define PASSWORD_MATCH            4
-#define PASSWORD_NOT_MATCH        5
-#define PASSWORD_SAVED            6
-
-void Save_Password(void);
-void Check_Password(void);
-void Lock_And_Buzzer(void);
-void Open_Door(void);
 
 int main()
 {
@@ -34,8 +18,8 @@ int main()
 	UART_init();
 	EEPROM_init();
 
-	DDRB  = 0xFF;
-	PORTB = 0x00;
+//	DDRB  = 0xFF;
+//	PORTB = 0x00;
 
 	//MOTOR Pin Initialization
 	/* configure pin PC0 and PC1 as output pins */
@@ -62,9 +46,6 @@ int main()
 					Check_Password();
 					break;
 
-			case	LOCK_AND_BUZZER_COMMAND :
-					Lock_And_Buzzer();
-					break;
 
 			case	OPEN_DOOR_COMMAND :
 					Open_Door();
@@ -97,10 +78,10 @@ void Save_Password()
 
 	//Check If Password Is Stored Correctly
 	//Check Indicator On Leds
-	if (cmp == 0) //match
-		PORTB = 1<<0;
-	else
-		PORTB = 1<<1;
+//	if (cmp == 0) //match
+//		PORTB = 1<<0;
+//	else
+//		PORTB = 1<<1;
 
 }
 
@@ -123,22 +104,16 @@ void Check_Password()
 	if (cmp == 0) //match
 	{
 		UART_sendByte(PASSWORD_MATCH);
-		PORTB = 1<<2;
+//		PORTB = 1<<2;
 	}
 	else
 	{
 		UART_sendByte(PASSWORD_NOT_MATCH);
-		PORTB = 1<<3;
+//		PORTB = 1<<3;
 	}
 }
 
-void Lock_And_Buzzer()
-{
 
-
-
-
-}
 
 void Open_Door()
 {

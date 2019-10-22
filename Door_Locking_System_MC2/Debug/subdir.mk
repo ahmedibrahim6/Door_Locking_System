@@ -7,18 +7,21 @@ C_SRCS += \
 ../MC2.c \
 ../external_eeprom.c \
 ../i2c.c \
+../timer.c \
 ../uart.c 
 
 OBJS += \
 ./MC2.o \
 ./external_eeprom.o \
 ./i2c.o \
+./timer.o \
 ./uart.o 
 
 C_DEPS += \
 ./MC2.d \
 ./external_eeprom.d \
 ./i2c.d \
+./timer.d \
 ./uart.d 
 
 

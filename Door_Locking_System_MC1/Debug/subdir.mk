@@ -7,18 +7,21 @@ C_SRCS += \
 ../MC1.c \
 ../keypad.c \
 ../lcd.c \
+../timer.c \
 ../uart.c 
 
 OBJS += \
 ./MC1.o \
 ./keypad.o \
 ./lcd.o \
+./timer.o \
 ./uart.o 
 
 C_DEPS += \
 ./MC1.d \
 ./keypad.d \
 ./lcd.d \
+./timer.d \
 ./uart.d 
 
 

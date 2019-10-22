@@ -30,6 +30,8 @@ c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_unpack_sf.o)
                               c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_addsub_sf.o) (__unpack_f)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_fpcmp_parts_sf.o)
                               c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_gt_sf.o) (__fpcmp_parts_f)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(strcmp.o)
+                              ./MC2.o (strcmp)
 
 Memory Configuration
 
@@ -48,6 +50,7 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm16
 LOAD ./MC2.o
 LOAD ./external_eeprom.o
 LOAD ./i2c.o
+LOAD ./timer.o
 LOAD ./uart.o
 LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
 LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a
@@ -143,7 +146,7 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x1606
+.text           0x00000000     0x1954
  *(.vectors)
  .vectors       0x00000000       0x54 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm16.o
                 0x00000000                __vectors
@@ -221,6 +224,7 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
  .text          0x00000082        0x0 ./MC2.o
  .text          0x00000082        0x0 ./external_eeprom.o
  .text          0x00000082        0x0 ./i2c.o
+ .text          0x00000082        0x0 ./timer.o
  .text          0x00000082        0x0 ./uart.o
  .text          0x00000082        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
  .text          0x00000082       0x58 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_fixunssfsi.o)
@@ -248,84 +252,97 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
                 0x00000994                __unpack_f
  .text          0x00000a84       0xb2 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_fpcmp_parts_sf.o)
                 0x00000a84                __fpcmp_parts_f
+ .text          0x00000b36        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(strcmp.o)
                 0x00000b36                . = ALIGN (0x2)
  *(.text.*)
- .text.main     0x00000b36      0x16a ./MC2.o
+ .text.main     0x00000b36      0x17c ./MC2.o
                 0x00000b36                main
  .text.Save_Password
-                0x00000ca0      0x2f6 ./MC2.o
-                0x00000ca0                Save_Password
+                0x00000cb2      0x318 ./MC2.o
+                0x00000cb2                Save_Password
  .text.Check_Password
-                0x00000f96      0x148 ./MC2.o
-                0x00000f96                Check_Password
- .text.Lock_And_Buzzer
-                0x000010de        0xe ./MC2.o
-                0x000010de                Lock_And_Buzzer
+                0x00000fca      0x14e ./MC2.o
+                0x00000fca                Check_Password
  .text.Open_Door
-                0x000010ec        0xe ./MC2.o
-                0x000010ec                Open_Door
+                0x00001118       0x7c ./MC2.o
+                0x00001118                Open_Door
  .text.EEPROM_init
-                0x000010fa       0x12 ./external_eeprom.o
-                0x000010fa                EEPROM_init
+                0x00001194       0x12 ./external_eeprom.o
+                0x00001194                EEPROM_init
  .text.EEPROM_writeString
-                0x0000110c       0x86 ./external_eeprom.o
-                0x0000110c                EEPROM_writeString
+                0x000011a6      0x168 ./external_eeprom.o
+                0x000011a6                EEPROM_writeString
  .text.EEPROM_readString
-                0x00001192       0x6e ./external_eeprom.o
-                0x00001192                EEPROM_readString
+                0x0000130e      0x174 ./external_eeprom.o
+                0x0000130e                EEPROM_readString
  .text.EEPROM_writeByte
-                0x00001200       0x82 ./external_eeprom.o
-                0x00001200                EEPROM_writeByte
+                0x00001482       0x82 ./external_eeprom.o
+                0x00001482                EEPROM_writeByte
  .text.EEPROM_readByte
-                0x00001282       0xc0 ./external_eeprom.o
-                0x00001282                EEPROM_readByte
+                0x00001504       0xc0 ./external_eeprom.o
+                0x00001504                EEPROM_readByte
  .text.TWI_init
-                0x00001342       0x2c ./i2c.o
-                0x00001342                TWI_init
+                0x000015c4       0x2c ./i2c.o
+                0x000015c4                TWI_init
  .text.TWI_start
-                0x0000136e       0x20 ./i2c.o
-                0x0000136e                TWI_start
+                0x000015f0       0x20 ./i2c.o
+                0x000015f0                TWI_start
  .text.TWI_stop
-                0x0000138e       0x16 ./i2c.o
-                0x0000138e                TWI_stop
+                0x00001610       0x16 ./i2c.o
+                0x00001610                TWI_stop
  .text.TWI_write
-                0x000013a4       0x2e ./i2c.o
-                0x000013a4                TWI_write
+                0x00001626       0x2e ./i2c.o
+                0x00001626                TWI_write
  .text.TWI_readWithACK
-                0x000013d2       0x26 ./i2c.o
-                0x000013d2                TWI_readWithACK
+                0x00001654       0x26 ./i2c.o
+                0x00001654                TWI_readWithACK
  .text.TWI_readWithNACK
-                0x000013f8       0x26 ./i2c.o
-                0x000013f8                TWI_readWithNACK
+                0x0000167a       0x26 ./i2c.o
+                0x0000167a                TWI_readWithNACK
  .text.TWI_getStatus
-                0x0000141e       0x1e ./i2c.o
-                0x0000141e                TWI_getStatus
+                0x000016a0       0x1e ./i2c.o
+                0x000016a0                TWI_getStatus
+ .text.timer_init
+                0x000016be       0x30 ./timer.o
+                0x000016be                timer_init
+ .text.start_timer
+                0x000016ee       0x50 ./timer.o
+                0x000016ee                start_timer
+ .text.Enable_Timer
+                0x0000173e       0x1c ./timer.o
+                0x0000173e                Enable_Timer
+ .text.Disable_Timer
+                0x0000175a       0x1e ./timer.o
+                0x0000175a                Disable_Timer
  .text.UART_init
-                0x0000143c       0x34 ./uart.o
-                0x0000143c                UART_init
+                0x00001778       0x34 ./uart.o
+                0x00001778                UART_init
  .text.UART_sendByte
-                0x00001470       0x2e ./uart.o
-                0x00001470                UART_sendByte
+                0x000017ac       0x2e ./uart.o
+                0x000017ac                UART_sendByte
  .text.UART_recieveByte
-                0x0000149e       0x1e ./uart.o
-                0x0000149e                UART_recieveByte
+                0x000017da       0x1e ./uart.o
+                0x000017da                UART_recieveByte
  .text.UART_sendString
-                0x000014bc       0x52 ./uart.o
-                0x000014bc                UART_sendString
+                0x000017f8       0x52 ./uart.o
+                0x000017f8                UART_sendString
  .text.UART_recieveString
-                0x0000150e       0x86 ./uart.o
-                0x0000150e                UART_recieveString
- .text.libgcc   0x00001594        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
- .text.libgcc   0x00001594       0x38 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
-                0x00001594                __prologue_saves__
- .text.libgcc   0x000015cc       0x36 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
-                0x000015cc                __epilogue_restores__
- .text.libgcc   0x00001602        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
-                0x00001602                . = ALIGN (0x2)
+                0x0000184a       0x86 ./uart.o
+                0x0000184a                UART_recieveString
+ .text.libgcc   0x000018d0        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .text.libgcc   0x000018d0       0x38 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
+                0x000018d0                __prologue_saves__
+ .text.libgcc   0x00001908       0x36 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
+                0x00001908                __epilogue_restores__
+ .text.libgcc   0x0000193e        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+ .text.avr-libc
+                0x0000193e       0x12 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(strcmp.o)
+                0x0000193e                strcmp
+                0x00001950                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00001602        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
-                0x00001602                exit
-                0x00001602                _exit
+ .fini9         0x00001950        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+                0x00001950                exit
+                0x00001950                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -344,17 +361,18 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00001602        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .fini0         0x00001950        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x00001606                _etext = .
+                0x00001954                _etext = .
 
-.data           0x00800060        0x8 load address 0x00001606
+.data           0x00800060        0x8 load address 0x00001954
                 0x00800060                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800060        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm16.o
  .data          0x00800060        0x0 ./MC2.o
  .data          0x00800060        0x0 ./external_eeprom.o
  .data          0x00800060        0x0 ./i2c.o
+ .data          0x00800060        0x0 ./timer.o
  .data          0x00800060        0x0 ./uart.o
  .data          0x00800060        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
  .data          0x00800060        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_fixunssfsi.o)
@@ -372,6 +390,7 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
  .data          0x00800068        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_pack_sf.o)
  .data          0x00800068        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_unpack_sf.o)
  .data          0x00800068        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_fpcmp_parts_sf.o)
+ .data          0x00800068        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(strcmp.o)
  *(.data*)
  *(.rodata)
  *(.rodata*)
@@ -387,6 +406,7 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
  .bss           0x00800068        0x0 ./MC2.o
  .bss           0x00800068        0x0 ./external_eeprom.o
  .bss           0x00800068        0x0 ./i2c.o
+ .bss           0x00800068        0x0 ./timer.o
  .bss           0x00800068        0x0 ./uart.o
  .bss           0x00800068        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
  .bss           0x00800068        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_fixunssfsi.o)
@@ -403,11 +423,12 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
  .bss           0x00800068        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_pack_sf.o)
  .bss           0x00800068        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_unpack_sf.o)
  .bss           0x00800068        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_fpcmp_parts_sf.o)
+ .bss           0x00800068        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a(strcmp.o)
  *(.bss*)
  *(COMMON)
                 0x00800068                PROVIDE (__bss_end, .)
-                0x00001606                __data_load_start = LOADADDR (.data)
-                0x0000160e                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00001954                __data_load_start = LOADADDR (.data)
+                0x0000195c                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800068        0x0
                 0x00800068                PROVIDE (__noinit_start, .)
@@ -432,19 +453,21 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
 .signature
  *(.signature*)
 
-.stab           0x00000000     0x150c
+.stab           0x00000000     0x1974
  *(.stab)
- .stab          0x00000000      0x93c ./MC2.o
- .stab          0x0000093c      0x54c ./external_eeprom.o
-                                0x708 (size before relaxing)
- .stab          0x00000e88      0x33c ./i2c.o
+ .stab          0x00000000      0xa44 ./MC2.o
+ .stab          0x00000a44      0x648 ./external_eeprom.o
+                                0x8ac (size before relaxing)
+ .stab          0x0000108c      0x33c ./i2c.o
                                 0x5a0 (size before relaxing)
- .stab          0x000011c4      0x348 ./uart.o
+ .stab          0x000013c8      0x264 ./timer.o
+                                0x4bc (size before relaxing)
+ .stab          0x0000162c      0x348 ./uart.o
                                 0x5a0 (size before relaxing)
 
-.stabstr        0x00000000      0xc82
+.stabstr        0x00000000      0xbf5
  *(.stabstr)
- .stabstr       0x00000000      0xc82 ./MC2.o
+ .stabstr       0x00000000      0xbf5 ./MC2.o
 
 .stab.excl
  *(.stab.excl)

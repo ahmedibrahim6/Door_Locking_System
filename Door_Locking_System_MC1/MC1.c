@@ -5,38 +5,8 @@
  *      Author: Ahmed
  */
 
+#include "MC1.h"
 
-
-
-#include "keypad.h"
-#include "lcd.h"
-#include "uart.h"
-#include "timer.h"
-#include <string.h>
-
-#define SAVE_PASSWORD_COMMAND     0
-#define CHECK_PASSWORD_COMMAND    1
-#define LOCK_AND_BUZZER_COMMAND   2
-#define OPEN_DOOR_COMMAND         3
-#define PASSWORD_MATCH            4
-#define PASSWORD_NOT_MATCH        5
-#define PASSWORD_SAVED            6
-
-#define ENTER_KEY        13
-#define CHANGE_PASS_KEY  '+'
-#define OPEN_DOOR_KEY    '-'
-
-void OPTION1_setNewPassword(void);
-void OPTION2_ChangePassword(void);
-void OPTION3_openDoor(void);
-void OPTION4_mismatchPassword( void(*ptr) (void));
-bool GET_passwordAndCheck();
-void OPENING_door(void);
-void LOCK_and_Buzzer(void);
-
-//bool g_setPasswordFirstTime = TRUE ;
-
-uint8 *g_password;
 
 int main()
 {
@@ -71,6 +41,9 @@ int main()
 
 
 }
+
+
+
 
 void OPTION1_setNewPassword(void)
 {
