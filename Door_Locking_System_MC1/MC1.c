@@ -216,7 +216,7 @@ void OPENING_door()
 	UART_sendByte(OPEN_DOOR_COMMAND);
 
 	LCD_clearScreen();
-	LCD_displayStringRowColumn(0,0,"Openning Door...");
+       LCD_displayStringRowColumn(0,0,"Opening Door...");
 
 	UART_recieveByte(); //Door Opened
 }
