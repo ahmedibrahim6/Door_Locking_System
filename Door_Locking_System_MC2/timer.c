@@ -34,5 +34,5 @@ void Enable_Timer(void)
 
 void Disable_Timer(void)
 {
-	TCCR1B = TCCR1B = (1<<WGM12);
+        TCCR1B = (1<<WGM12);
 }
